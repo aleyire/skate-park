@@ -1,5 +1,7 @@
 ## Skate Park
 
+![](https://github.com/aleyire/skate-park/blob/main/public/img/emojis.jpg)
+
 Plataforma Web que permite registrarse y revisar el estado de su solicitud para participar en una competencia deportiva de Skate.
 
 ### Materia aplicada
@@ -23,10 +25,9 @@ Plataforma Web que permite registrarse y revisar el estado de su solicitud para 
 `npm init`
 `npm i express`
 `npm i handlebars`
-`npm i body-parser`---- Revisar si es necesario
 `npm i express-fileupload`
 `npm i pg`
-`npm i jwt`---- revisar si es necesario
+`npm i jsonwebtoken`
 
 ### Visualizaciones
 #### Lista de participantes
