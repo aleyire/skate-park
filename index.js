@@ -1,19 +1,19 @@
 const express = require("express")
 const expressFileUpload = require("express-fileupload")
 const { engine } = require("express-handlebars")
-const skateRouter = require("./src/db/skaters")
+const skaterRouter = require("./src/routes/skaters")
 const app = express()
-const { getAll, getEmailPass, deleteById, create, status, update } = require("./src/db/skaters")
+const bodyParser = require("body-parser")
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 const PORT = 3000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.get("skaters", getEmailPass)
-app.post("/skaters", create)
-app.put("/skaters", update)
-app.delete("/skaters", deleteById)
+app.use("/skaters", skaterRouter)
 
 app.use("/", express.static(__dirname + "/public"))
 
@@ -37,7 +37,6 @@ app.set("view engine", "handlebars")
 
 // Views
 app.get("/", async (req, res) => {
-  const data = await getAll()
   res.render("index") 
 })
 

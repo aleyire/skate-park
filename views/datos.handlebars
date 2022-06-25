@@ -6,35 +6,66 @@
     <form class="bg-dark">
       <div class="form-group row w-50 m-auto">
         {{#each user}}
-        <div class="form-group col-12 col-sm-6">
-          <label>Email</label>
-          <input
-            class="form-control m-auto"
-            disabled
-            value={{this.email}}
-            id="email"
-          />
-        </div>
-        <div class="form-group col-12 col-sm-6">
-          <label>Nombre</label>
-          <input class="form-control m-auto" value={{this.nombre}} id="nombre" />
-        </div>
-        <div class="form-group col-12 col-sm-6">
-          <label>Password</label>
-          <input type="password" class="form-control m-auto" value={{this.password}} id="password" />
-        </div>
-        <div class="form-group col-12 col-sm-6">
-          <label>Repita la password</label>
-          <input type="password" class="form-control m-auto" value={{this.password}} id="password2" />
-        </div>
-        <div class="form-group col-12 col-sm-6">
-          <label>Años de experiencia</label>
-          <input class="form-control m-auto" value={{this.anos_experiencia}} id="anos_experiencia" />
-        </div>
-        <div class="form-group col-12 col-sm-6">
-          <label>Especialidad</label>
-          <input class="form-control m-auto" value={{this.especialidad}} id="especialidad" />
-        </div>
+          <div class="form-group col-12 col-sm-6">
+            <label>Email</label>
+            <input
+              class="form-control m-auto"
+              disabled
+              value={{this.email}}
+              id="email"
+            />
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label>Nombre</label>
+            <input
+              class="form-control m-auto"
+              value={{this.nombre}}
+              id="nombre"
+            />
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label>Password</label>
+            <input
+              type="password"
+              class="form-control m-auto"
+              value={{this.password}}
+              id="password"
+            />
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label>Repita la password</label>
+            <input
+              type="password"
+              class="form-control m-auto"
+              value={{this.password}}
+              id="password2"
+            />
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label>Años de experiencia</label>
+            <input
+              class="form-control m-auto"
+              value={{this.anos_experiencia}}
+              id="anos_experiencia"
+            />
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label>Especialidad</label>
+            <input
+              class="form-control m-auto"
+              value={{this.especialidad}}
+              id="especialidad"
+            />
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label>ID</label>
+            <input
+              class="form-control m-auto"
+              value={{this.id}}
+              id="id"
+              disabled
+            />
+          </div>
         {{/each}}
       </div>
       <div class="mb-1">
@@ -45,4 +76,27 @@
       </div>
     </form>
   </div>
+  <script>
+    const form = document.querySelector("#formulario")
+    const email = document.querySelector("#email")
+    const nombre = document.querySelector("#nombre")
+    const password = document.querySelector("#password")
+    const password2 = document.querySelector("#new-password")
+    const anio_exp = document.querySelector("#anioExp")
+    const especialidad = document.querySelector("#especialidad")
+    const id = document.querySelector("#id")
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault()
+      const data = {
+        email: email.value,
+        nombre: nombre.value,
+        password: password.value,
+        anos_experiencia: anio_exp.value,
+        especialidad: especialidad.value,
+        id: id.value,
+      }
+        const datos = await axios.put(`http://localhost:3000/api/v1/skaters/${data.id}`, data)
+        window.location.href = '/'
+    })
+  </script>
 </body>
