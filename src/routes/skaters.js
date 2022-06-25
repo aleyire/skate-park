@@ -1,18 +1,13 @@
 const express = require("express")
+const path = require("path")
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const key = "123456"
 
-const {
-  getAll,
-  getByEmailClave,
-  deleteById,
-  create,
-  status,
-  update,
-} = require("../db/skaters")
+const { getAll, getEmailPass, deleteById, create, status, update } = require("../db/skaters")
 
-router.get("/datos", async (req, res) => { // Ruta que muestra la lista de participantes
+// Ruta que muestra la lista de participantes
+router.get("/skaters", async (req, res) => {
   try {
     const users = await getAll()
     res.send(users)
@@ -21,7 +16,8 @@ router.get("/datos", async (req, res) => { // Ruta que muestra la lista de parti
   }
 })
 
-router.put("/:id", async (req, res) => { // Ruta para modificar un participante por id y estado
+// Ruta para modificar un participante por id y estado
+router.put("/:id", async (req, res) => {
   try {
     const user = await status(req.params.id, req.params.estado)
     if (user) res.send(user)
@@ -31,37 +27,38 @@ router.put("/:id", async (req, res) => { // Ruta para modificar un participante 
   }
 })
 
-router.post("/login", async (req, res) => { // Ruta para crear un participante
+// Ruta para que ingrese un participante
+router.post("/", async (req, res) => {
   try {
-    const beforeUser = await getByEmailClave(req.body.email, req.body.clave)
+    const beforeUser = await getEmailPass(req.body.email, req.body.password)
     if (beforeUser) {
       res.status(400).send({
-        error: "El email ya existe",
+          error: 'El usuario ya existe'
       })
     } else {
       const user = await create(req.body)
-      const token = jwt.sign(
-        {
-          exp: Math.floor(Date.now() / 1000) + 120,
-          data: user,
-        },
-        key
-      )
-      res.send(`
-    <a href="/views/datos?token=${token}"> <p> Ir a los datos </p> </a>
-    Bienvenido, ${email}.
-    <script>
-    localStorage.setItem('token', JSON.stringify("${token}"))
-    </script>
-    `)
+      res.send(user)
     }
-    res.send(user)
   } catch (error) {
     res.status(500).send(error)
   }
 })
 
-router.delete("/:id", async (req, res) => { // Ruta para eliminar un participante por id
+// Ruta para crear a los participantes
+router.post("/registro", async (req, res) => {
+  try {
+  const user = await create(req.body)
+  res.send(user)
+  } catch (error) {
+    res.status(500).send({
+      error: `Algo salió mal... ${error}`,
+      code: 500
+  })
+  }
+})
+
+// Ruta para eliminar un participante por id
+router.delete("/:id", async (req, res) => {
   try {
     const user = await deleteById(req.params.id)
     if (user) res.send(user)
@@ -71,7 +68,8 @@ router.delete("/:id", async (req, res) => { // Ruta para eliminar un participant
   }
 })
 
-router.put("/:id", async (req, res) => { // Ruta para actualizar un participante por id
+// Ruta para actualizar un participante por id
+router.put("/:id", async (req, res) => {
   try {
     const user = await update(req.params.id, req.body)
     if (user) res.send(user)

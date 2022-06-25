@@ -10,12 +10,12 @@ const getAll = async () => { // seleccionar todos los participantes
   }
 }
 
-const getByEmailClave = async (email, clave) => { // seleccionar a un participante por email y clave
+const getEmailPass = async (email, password) => { // seleccionar a un participante por email y clave
   const client = getConnection()
   try {
     const query = {
-      text: "SELECT * FROM skaters WHERE email = $1 AND clave = $2",
-      values: [email, clave],
+      text: "SELECT * FROM skaters WHERE email = $1 AND password = $2",
+      values: [email, password],
     }
     const result = await client.query(query)
     return result.rows[0]
@@ -56,8 +56,8 @@ const create = async (user) => { // crear un participante
   const client = getConnection()
   try {
     const query = {
-      text: "INSERT INTO skaters (email, nombre, clave, anos_experiencia, especialidad, foto, estado) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      values: [user.email, user.nombre, user.clave, user.anos_experiencia, user.especialidad, user.foto, user.estado],
+      text: "INSERT INTO skaters (email, nombre, password, anos_experiencia, especialidad, foto, estado) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      values: [user.email, user.nombre, user.password, user.anos_experiencia, user.especialidad, user.foto, user.estado],
     }
     const result = await client.query(query)
     return result.rows[0]
@@ -70,8 +70,8 @@ const update = async (id, user) => { // actualizar un participante
   const client = getConnection()
   try {
     const query = {
-      text: "UPDATE skaters SET nombre = $1, clave = $2, anos_experiencia = $3, especialidad = $4 WHERE id = $5 RETURNING *",
-      values: [user.nombre, user.clave, user.anos_experiencia, user.especialidad, id],
+      text: "UPDATE skaters SET nombre = $1, password = $2, anos_experiencia = $3, especialidad = $4 WHERE id = $5 RETURNING *",
+      values: [user.nombre, user.password, user.anos_experiencia, user.especialidad, id],
     }
     const result = await client.query(query)
     return result.rows[0]
@@ -82,7 +82,7 @@ const update = async (id, user) => { // actualizar un participante
 
 module.exports = {
   getAll,
-  getByEmailClave,
+  getEmailPass,
   status,
   deleteById,
   create,

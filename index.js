@@ -1,17 +1,19 @@
 const express = require("express")
 const expressFileUpload = require("express-fileupload")
 const { engine } = require("express-handlebars")
-const skateRouter = require("./src/routes/skaters")
+const skateRouter = require("./src/db/skaters")
 const app = express()
+const { getAll, getEmailPass, deleteById, create, status, update } = require("./src/db/skaters")
 
-app.listen(3000, () => {
-  console.log("Server on")
-})
+const PORT = 3000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.use("/skaters", skateRouter)
+app.get("skaters", getEmailPass)
+app.post("/skaters", create)
+app.put("/skaters", update)
+app.delete("/skaters", deleteById)
 
 app.use("/", express.static(__dirname + "/public"))
 
@@ -33,8 +35,10 @@ app.engine( // Vistas
 )
 app.set("view engine", "handlebars")
 
-app.get("/", (req, res) => {
-  res.render("index") // renderiza la vista index
+// Views
+app.get("/", async (req, res) => {
+  const data = await getAll()
+  res.render("index") 
 })
 
 app.get("/registro", (req, res) => {
@@ -47,4 +51,8 @@ app.get("/login", (req, res) => {
 
 app.get("/admin", (req, res) => {
   res.render("admin")
+})
+
+app.listen(PORT, () => {
+  console.log("Server on")
 })
